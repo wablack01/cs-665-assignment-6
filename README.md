@@ -1,29 +1,55 @@
 
 | CS-665       | Software Design & Patterns |
 |--------------|----------------------------|
-| Name         | FIRST_NAME LAST_NAME       |
-| Date         | MM/DD/YYYY                 |
-| Course       | Fall / Spring / Summer     |
-| Assignment # |                            |
+| Name         | Walker Black               |
+| Date         | 02/08/2024                 |
+| Course       | Spring                     |
+| Assignment # | 1                          |
 
 # Assignment Overview
-Please add a paragraph or two overviewing the objectives of the assignment.
+The objective of this assignment is to create an application capable of controlling an automated beverage vending
+machine. A user can use the machine to order coffee and tea products. Condiments can also be selected to add to the 
+beverage. Up to three servings of any selected condiment can be added to the beverage. Coffee products costs $2, tea 
+products cost $1.50, and condiments cost $0.50 per serving. When the user is satisfied with their beverage and condiment
+selections they can place the order and the beverage will be automatically prepared by the machine and the condiments 
+will be added. In this implementation the available products are:
+
+- Coffee:
+  - Espresso
+  - Americano
+  - Latte Macchiato
+- Tea:
+  - Black Tea
+  - Green Tea
+  - Yellow Tea
+- Condiments:
+  - Milk
+  - Sugar
 
 # GitHub Repository Link:
-https://github.com/{YOUR_USERNAME}/cs-665-assignment-{ASSIGNMENT_NUMBER}
+https://github.com/wablack01/cs-665-assignment-1
 
-# Implementation Description 
+# Implementation Description
+- New beverages can be added as subclasses of either Coffee or Tea, and new condiments added as subclasses of Condiment. 
+When creating a new Coffee or Tea subclass all that needs to be defined is the beverage name, beverage price, and 
+quantities of relevant ingredients (espresso, water, steamed milk for coffee, and tea leaves and water for tea). New 
+condiments only need to define a name and price as well as implement the addToBeverage function. If a new category of 
+drink is added (other than coffee of tea) it can extend the Beverage class directly. BeverageMachine class interacts
+only with the Beverage and Condiment classes so new beverages and condiments can be added without modifying the
+BeverageMachine code.
 
+- Classes are placed in organized packages with other similar classes. There is a logical class hierarchy of Beverages
+and Condiments where general functionality is defined in parent classes and subclasses define only additional 
+functionality and/or data. The role of each class and function is clear from its name and the code is well commented. 
 
-For each assignment, please answer the following:
-
-- Explain the level of flexibility in your implementation, including how new object types can
-be easily added or removed in the future.
-- Discuss the simplicity and understandability of your implementation, ensuring that it is
-easy for others to read and maintain.
-- Describe how you have avoided duplicated code and why it is important.
-- If applicable, mention any design patterns you have used and explain why they were
-chosen.
+- To avoid duplicate code I implemented functionality at the highest levels possible in the class hierarchy. For
+example, the process of making a beverage is similar for all coffees and for all teas. The only difference in most
+cases is the ratio of ingredients (i.e., the espresso, steamed milk, and/or water for coffee). Therefore I implemented
+the makeBeverage function at the Coffee and Tea level so new subclasses only need to define the amount of relevant
+ingredients, not how to make the drink.
+  - In this implementation the makeBeverage function is actually the same for Coffee
+  and Tea but on real beverage machine hardware they would likely be different enough that implementing at this level
+  makes more sense than implementing at the Beverage level and then overriding.
 
 
 # Maven Commands
