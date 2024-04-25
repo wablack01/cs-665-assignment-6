@@ -21,5 +21,21 @@ public class Constants {
   //Max condiment quantity
   public static final int CONDIMENT_MAX_QTY = 3;
 
+  //Ingredients
+  public static final int AMERICANO_WATER = 6;
+  public static final int AMERICANO_ESPRESSO = 2;
+  public static final int AMERICANO_STEAMED_MILK = 0;
+
+  public static final int ESPRESSO_WATER = 0;
+  public static final int ESPRESSO_ESPRESSO = 2;
+  public static final int ESPRESSO_STEAMED_MILK = 0;
+
+  public static final int LATTE_MACCHIATO_WATER = 0;
+  public static final int LATTE_MACCHIATO_ESPRESSO = 2;
+  public static final int LATTE_MACCHIATO_STEAMED_MILK = 4;
+
+  public static final int TEA_WATER = 6;
+  public static final int TEA_LEAVES = 0;
+
   private Constants() {}
 }

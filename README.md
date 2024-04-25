@@ -2,55 +2,59 @@
 | CS-665       | Software Design & Patterns |
 |--------------|----------------------------|
 | Name         | Walker Black               |
-| Date         | 02/08/2024                 |
+| Date         | 04/25/2024                 |
 | Course       | Spring                     |
-| Assignment # | 1                          |
+| Assignment # | 6                          |
 
 # Assignment Overview
-The objective of this assignment is to create an application capable of controlling an automated beverage vending
-machine. A user can use the machine to order coffee and tea products. Condiments can also be selected to add to the 
-beverage. Up to three servings of any selected condiment can be added to the beverage. Coffee products costs $2, tea 
-products cost $1.50, and condiments cost $0.50 per serving. When the user is satisfied with their beverage and condiment
-selections they can place the order and the beverage will be automatically prepared by the machine and the condiments 
-will be added. In this implementation the available products are:
+The objective of this assignment is to refactor a previous assignment to improve the code quality. I chose to refactor
+assignment #1 by removing unnecessary inheritance structures, replacing some Strings with Enum values, replacing
+"magic numbers" with constants, and implementing the factory method design pattern.
 
-- Coffee:
-  - Espresso
-  - Americano
-  - Latte Macchiato
-- Tea:
-  - Black Tea
-  - Green Tea
-  - Yellow Tea
-- Condiments:
-  - Milk
-  - Sugar
+The original objective of assignment #1 was to create an application capable of controlling an automated beverage 
+vending machine. The user can order various coffee or tea products as well as add condiments to their order. A
+more complete description of the application is found in the assignment #1 read me.
 
 # GitHub Repository Link:
-https://github.com/wablack01/cs-665-assignment-1
+https://github.com/wablack01/cs-665-assignment-6
+
+# Refactoring Changes
+- Factory Method Pattern
+  - I implemented the factory method pattern for the creation of beverages. The name of a beverage is given to the
+  BeverageMachine which uses the CoffeeTeaBeverageFactory to create the appropriate beverage. The factory then creates
+  a new Coffee or Tea with the appropriate ratio of ingredients based on the chosen beverage type. These leads to
+  a better separation of concerns as the factory is responsible for determining the correct beverage type.
+- Unnecessary Inheritance Structures
+  - I removed the various types of Coffee, Tea, and Condiment subclasses from the project. These subclasses did not
+  add new functionality and only served to call the super class constructor with the ingredients/properties of each
+  beverage. Instead of subclasses all beverages and condiments are instantiated as Coffee, Tea, or Condiment classes
+  with properties that signal their type. Instead of defining the ingredient quantities in the subclasses they are given
+  to the appropriate constructor by the CoffeeTeaBeverageFactory. This simplifies the inheritance structure and makes
+  it easier to add new beverage types.
+- Removing Magic Numbers
+  - Ingredient quantities were originally defined in the Coffee and Tea subclass constructors. They are now defined
+  as constants in the Constants class and are given to the Coffee and Tea constructors in the CoffeeTeaBeverageFactory.
+  This leads to better code clarity as the purpose of the numbers is clearly defined, and easier to maintain code
+  if these values ever need to change they are all in one place.
+- Replacing Strings as Enums
+  - I added the CondimentType enum to define condiment types rather than use a String. This is a small change but leads
+  to better type safety and enhanced code clarity.
 
 # Implementation Description
-- New beverages can be added as subclasses of either Coffee or Tea, and new condiments added as subclasses of Condiment. 
-When creating a new Coffee or Tea subclass all that needs to be defined is the beverage name, beverage price, and 
-quantities of relevant ingredients (espresso, water, steamed milk for coffee, and tea leaves and water for tea). New 
-condiments only need to define a name and price as well as implement the addToBeverage function. If a new category of 
-drink is added (other than coffee of tea) it can extend the Beverage class directly. BeverageMachine class interacts
-only with the Beverage and Condiment classes so new beverages and condiments can be added without modifying the
-BeverageMachine code.
+- New beverage types can be added as subclasses of Beverage, and new condiments added as a CondimentType enum.
+New types of Coffee or Tea do not need to be created as new subclasses, but their ingredient quantities must
+be given to the CoffeeTeaBeverageFactory.
 
-- Classes are placed in organized packages with other similar classes. There is a logical class hierarchy of Beverages
-and Condiments where general functionality is defined in parent classes and subclasses define only additional 
-functionality and/or data. The role of each class and function is clear from its name and the code is well commented. 
+- Classes are placed in organized packages with other similar classes. The role of each class and function is clear from
+its name and the code is well commented. I also removed unnecessary subclasses which had made the file structure
+too complicated.
 
-- To avoid duplicate code I implemented functionality at the highest levels possible in the class hierarchy. For
-example, the process of making a beverage is similar for all coffees and for all teas. The only difference in most
-cases is the ratio of ingredients (i.e., the espresso, steamed milk, and/or water for coffee). Therefore I implemented
-the makeBeverage function at the Coffee and Tea level so new subclasses only need to define the amount of relevant
-ingredients, not how to make the drink.
-  - In this implementation the makeBeverage function is actually the same for Coffee
-  and Tea but on real beverage machine hardware they would likely be different enough that implementing at this level
-  makes more sense than implementing at the Beverage level and then overriding.
+- To avoid duplicate code I removed unnecessary subclasses whose only purpose was to call the parent class. This
+code has been replaced in the CoffeeTeaBeverageFactory.
 
+- I added the factory method pattern to this application. The CoffeeTeaBeverageFactory class handles the creation
+of different beverage types selected by the user. The application generates different types of related objects 
+(Beverages) based on the customer's selection which the factory method pattern handles very well.
 
 # Maven Commands
 

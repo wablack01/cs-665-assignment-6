@@ -3,23 +3,21 @@
  * Course: CS-665 Software Designs & Patterns
  * Date: 02/08/2024
  * File Name: Coffee.java
- * Description: This abstract class is responsible for the methods and attributes of a Coffee.
+ * Description: This class is responsible for the methods and attributes of a Coffee.
  */
 
-package edu.bu.met.cs665.beverages.coffees;
+package edu.bu.met.cs665.beverages;
 
 import edu.bu.met.cs665.beverages.Beverage;
 import edu.bu.met.cs665.constants.Constants;
 
 /**
- * This is the Coffee abstract class.
- * This class is responsible for representing a Coffee which is a subclass of Beverage and a parent
- * to several subclasses.
+ * This is the Coffee class.
+ * This class is responsible for representing a Coffee which is a subclass of Beverage
  */
-public abstract class Coffee extends Beverage {
+public class Coffee extends Beverage {
 
   double espressoQty;
-  double waterQty;
   double steamedMilkQty;
 
   /**
@@ -27,14 +25,13 @@ public abstract class Coffee extends Beverage {
    * to the parent class.
    *
    * @param name the name/type of the Coffee
-   * @param espressoQty the quantity of espresso used in the coffee
    * @param waterQty the quantity of water used in the coffee
+   * @param espressoQty the quantity of espresso used in the coffee
    * @param steamedMilkQty the quantity of steamed milk used in the coffee
    */
-  public Coffee(String name, double espressoQty, double waterQty, double steamedMilkQty) {
-    super(name, Constants.COFFEE_BASE_PRICE);
+  public Coffee(String name, double waterQty, double espressoQty, double steamedMilkQty) {
+    super(name, Constants.COFFEE_BASE_PRICE, waterQty);
     this.espressoQty = espressoQty;
-    this.waterQty = waterQty;
     this.steamedMilkQty = steamedMilkQty;
   }
 

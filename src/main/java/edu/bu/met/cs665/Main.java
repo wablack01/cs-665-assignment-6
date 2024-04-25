@@ -9,9 +9,7 @@
 package edu.bu.met.cs665;
 
 
-import edu.bu.met.cs665.beverages.coffees.Americano;
-import edu.bu.met.cs665.condiments.Milk;
-import edu.bu.met.cs665.condiments.Sugar;
+import edu.bu.met.cs665.condiments.CondimentType;
 import edu.bu.met.cs665.machine.BeverageMachine;
 
 /**
@@ -24,9 +22,9 @@ public class Main {
    */
   public static void main(String[] args) {
     BeverageMachine beverageMachine = new BeverageMachine();
-    beverageMachine.setCurrentBeverage(new Americano());
-    beverageMachine.addCondiment(new Sugar());
-    beverageMachine.addCondiment(new Milk());
+    beverageMachine.setCurrentBeverage("Americano");
+    beverageMachine.addCondiment(CondimentType.SUGAR);
+    beverageMachine.addCondiment(CondimentType.MILK);
     beverageMachine.placeOrder();
   }
 }

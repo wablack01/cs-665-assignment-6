@@ -10,6 +10,10 @@ package edu.bu.met.cs665.machine;
 
 import edu.bu.met.cs665.beverages.Beverage;
 import edu.bu.met.cs665.condiments.Condiment;
+import edu.bu.met.cs665.condiments.CondimentType;
+import edu.bu.met.cs665.factories.BeverageFactory;
+import edu.bu.met.cs665.factories.CoffeeTeaBeverageFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,8 +23,10 @@ import java.util.Map;
  * It provides methods for selecting beverages, selecting condiments, and placing an order.
  */
 public class BeverageMachine {
+
+  private BeverageFactory beverageFactory = new CoffeeTeaBeverageFactory();
   private Beverage currentBeverage;
-  private Map<String, Condiment> currentCondiments;
+  private Map<CondimentType, Condiment> currentCondiments;
   private double totalPrice;
 
   /**
@@ -35,12 +41,12 @@ public class BeverageMachine {
   /**
    * Setter method for cyrrentBeverage. Also clears currentCondiments and adjusts total price.
    *
-   * @param beverage the type of beverage the user is preparing to order
+   * @param type the type of beverage the user is preparing to order
    */
-  public void setCurrentBeverage(Beverage beverage) {
-    this.currentBeverage = beverage;
+  public void setCurrentBeverage(String type) {
+    this.currentBeverage = beverageFactory.createBeverage(type);
     this.currentCondiments.clear();
-    this.totalPrice = beverage.getPrice();
+    this.totalPrice = currentBeverage.getPrice();
   }
 
   /**
@@ -66,7 +72,7 @@ public class BeverageMachine {
    *
    * @return the Map of currently selected Condiments
    */
-  public Map<String, Condiment> getCurrentCondiments() {
+  public Map<CondimentType, Condiment> getCurrentCondiments() {
     return this.currentCondiments;
   }
 
@@ -75,19 +81,18 @@ public class BeverageMachine {
    * The total price of the order is adjusted according to the added quantity, either 1 or 0,
    * and the price of the condiment.
    *
-   * @param newCondiment the type of condiment to add
+   * @param condimentType the type of condiment to add
    */
-  public void addCondiment(Condiment newCondiment) {
+  public void addCondiment(CondimentType condimentType) {
     if (currentBeverage == null) {
       return;
     }
 
-    String condimentName = newCondiment.getName();
-    Condiment addedCondiment = currentCondiments.getOrDefault(condimentName, newCondiment);
+    Condiment addedCondiment = currentCondiments.getOrDefault(condimentType, new Condiment(condimentType));
     int addedQty = addedCondiment.increaseQuantity();
-    currentCondiments.put(condimentName, addedCondiment);
+    currentCondiments.put(condimentType, addedCondiment);
 
-    totalPrice += (addedQty * newCondiment.getPrice());
+    totalPrice += (addedQty * addedCondiment.getPrice());
   }
 
   /**
@@ -95,21 +100,21 @@ public class BeverageMachine {
    * reduced to 0 the condiment is removed entirely. The total price is reduced by the price
    * of the removed condiment.
    *
-   * @param condimentName the name of the condiment to remove
+   * @param condimentType the type of the condiment to remove
    */
-  public void removeCondiment(String condimentName) {
+  public void removeCondiment(CondimentType condimentType) {
     if (currentBeverage == null) {
       return;
     }
 
-    Condiment selectedCondiment = currentCondiments.get(condimentName);
+    Condiment selectedCondiment = currentCondiments.get(condimentType);
     if (selectedCondiment == null) {
       return;
     }
 
     selectedCondiment.decreaseQuantity();
     if (selectedCondiment.getQuantity() == 0) {
-      currentCondiments.remove(condimentName);
+      currentCondiments.remove(condimentType);
     }
 
     totalPrice -= selectedCondiment.getPrice();
@@ -136,8 +141,7 @@ public class BeverageMachine {
     }
 
     currentBeverage.makeBeverage();
-    currentCondiments.forEach((name,condiment) -> {
-      condiment.addToBeverage();
+    currentCondiments.forEach((type,condiment) -> {
       currentBeverage.condimentAdded(condiment);
     });
 

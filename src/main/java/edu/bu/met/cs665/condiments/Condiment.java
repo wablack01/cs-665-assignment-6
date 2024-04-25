@@ -14,31 +14,28 @@ import edu.bu.met.cs665.constants.Constants;
  * This is the Condiment abstract class.
  * This class is responsible for representing a Condiment which the customer can add to a Beverage
  */
-public abstract class Condiment {
+public class Condiment {
 
-  protected String name;
-  private double price;
-  int quantity;
+  private CondimentType type;
+  private double price = Constants.CONDIMENT_BASE_PRICE;
+  int quantity = 0;
 
   /**
-   * Create a Condiment object with the given name and price values and setting the quantity to 0.
+   * Create a Condiment object of the given type.
    *
-   * @param name the name/type of the Condiment
-   * @param price the price of the Condiment
+   * @param type the type of the Condiment
    */
-  public Condiment(String name, double price) {
-    this.name = name;
-    this.price = price;
-    this.quantity = 0;
+  public Condiment(CondimentType type) {
+    this.type = type;
   }
 
-  /**
-   * Getter for the name of the Condiment.
+    /**
+   * Getter for the type of Condiment.
    *
-   * @return the name of the Condiment
+   * @return the type of the Condiment
    */
-  public String getName() {
-    return name;
+  public CondimentType getType() {
+    return type;
   }
 
   /**
@@ -79,11 +76,4 @@ public abstract class Condiment {
   public void decreaseQuantity() {
     this.quantity--;
   }
-
-  /**
-   * Abstract method to add the Condiment to the prepared beverage. Must be implemented
-   * by the subclasses. In full implementation this will activate physical processes of
-   * the machine to add the condiment to the drink being prepared.
-   */
-  public abstract void addToBeverage();
 }

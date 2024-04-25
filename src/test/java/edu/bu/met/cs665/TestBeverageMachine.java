@@ -10,10 +10,8 @@
 package edu.bu.met.cs665;
 
 import edu.bu.met.cs665.beverages.Beverage;
-import edu.bu.met.cs665.beverages.coffees.Americano;
 import edu.bu.met.cs665.condiments.Condiment;
-import edu.bu.met.cs665.condiments.Milk;
-import edu.bu.met.cs665.condiments.Sugar;
+import edu.bu.met.cs665.condiments.CondimentType;
 import edu.bu.met.cs665.constants.Constants;
 import edu.bu.met.cs665.machine.BeverageMachine;
 import org.junit.Test;
@@ -41,10 +39,10 @@ public class TestBeverageMachine {
         BeverageMachine beverageMachine = new BeverageMachine();
         assertNull(beverageMachine.getCurrentBeverage());
 
-        beverageMachine.setCurrentBeverage(new Americano());
+        beverageMachine.setCurrentBeverage("Americano");
         Beverage currentBeverage = beverageMachine.getCurrentBeverage();
         assertEquals("Americano", currentBeverage.getName());
-        assertEquals(Constants.COFFEE_BASE_PRICE, currentBeverage.getPrice(), 0);
+        assertEquals(2.0, currentBeverage.getPrice(), 0);
     }
 
     /**
@@ -54,23 +52,25 @@ public class TestBeverageMachine {
     @Test
     public void testCondimentQuantity() {
         BeverageMachine beverageMachine = new BeverageMachine();
-        beverageMachine.setCurrentBeverage(new Americano());
+        beverageMachine.setCurrentBeverage("Americano");
 
-        for (int i = 0; i < Constants.CONDIMENT_MAX_QTY; i++) {beverageMachine.addCondiment(new Sugar());}
-        Map<String, Condiment> condiments = beverageMachine.getCurrentCondiments();
-        assertEquals(3, condiments.get("Sugar").getQuantity());
+        for (int i = 0; i < Constants.CONDIMENT_MAX_QTY; i++) {
+          beverageMachine.addCondiment(CondimentType.SUGAR);
+        }
+        Map<CondimentType, Condiment> condiments = beverageMachine.getCurrentCondiments();
+        assertEquals(3, condiments.get(CondimentType.SUGAR).getQuantity());
 
         //should not add because already max quantity
-        beverageMachine.addCondiment(new Sugar());
-        assertEquals(3, condiments.get("Sugar").getQuantity());
+        beverageMachine.addCondiment(CondimentType.SUGAR);
+        assertEquals(3, condiments.get(CondimentType.SUGAR).getQuantity());
 
-        beverageMachine.removeCondiment("Sugar");
-        assertEquals(2, condiments.get("Sugar").getQuantity());
+        beverageMachine.removeCondiment(CondimentType.SUGAR);
+        assertEquals(2, condiments.get(CondimentType.SUGAR).getQuantity());
 
         //condiment removed at quantity 0
-        beverageMachine.removeCondiment("Sugar");
-        beverageMachine.removeCondiment("Sugar");
-        assertNull(condiments.get("Sugar"));
+        beverageMachine.removeCondiment(CondimentType.SUGAR);
+        beverageMachine.removeCondiment(CondimentType.SUGAR);
+        assertNull(condiments.get(CondimentType.SUGAR));
     }
 
     /**
@@ -82,17 +82,17 @@ public class TestBeverageMachine {
         BeverageMachine beverageMachine = new BeverageMachine();
         assertEquals(0, beverageMachine.getTotalPrice(), 0);
 
-        beverageMachine.setCurrentBeverage(new Americano());
+        beverageMachine.setCurrentBeverage("Americano");
         assertEquals(Constants.COFFEE_BASE_PRICE, beverageMachine.getTotalPrice(), 0);
 
-        beverageMachine.addCondiment(new Sugar());
+        beverageMachine.addCondiment(CondimentType.SUGAR);
         assertEquals(
                 Constants.COFFEE_BASE_PRICE + Constants.CONDIMENT_BASE_PRICE,
                 beverageMachine.getTotalPrice(),
                 0
         );
 
-        beverageMachine.removeCondiment("Sugar");
+        beverageMachine.removeCondiment(CondimentType.SUGAR);
         assertEquals(Constants.COFFEE_BASE_PRICE, beverageMachine.getTotalPrice(), 0);
     }
 
@@ -103,8 +103,8 @@ public class TestBeverageMachine {
     @Test
     public void testDeleteCurrentBeverage() {
         BeverageMachine beverageMachine = new BeverageMachine();
-        beverageMachine.setCurrentBeverage(new Americano());
-        beverageMachine.addCondiment(new Sugar());
+        beverageMachine.setCurrentBeverage("Americano");
+        beverageMachine.addCondiment(CondimentType.SUGAR);
         beverageMachine.deleteCurrentBeverage();
 
         assertNull(beverageMachine.getCurrentBeverage());
@@ -120,17 +120,17 @@ public class TestBeverageMachine {
     @Test
     public void testPlaceOrder() {
         BeverageMachine beverageMachine = new BeverageMachine();
-        beverageMachine.setCurrentBeverage(new Americano());
-        beverageMachine.addCondiment(new Sugar());
-        beverageMachine.addCondiment(new Milk());
+        beverageMachine.setCurrentBeverage("Americano");
+        beverageMachine.addCondiment(CondimentType.SUGAR);
+        beverageMachine.addCondiment(CondimentType.MILK);
 
         //ordered beverage properly configured
         Beverage completedBeverage = beverageMachine.placeOrder();
         double expectedPrice = Constants.COFFEE_BASE_PRICE + (Constants.CONDIMENT_BASE_PRICE * 2);
-        Map<String, Condiment> addedCondiments = completedBeverage.getCondiments();
+        Map<CondimentType, Condiment> addedCondiments = completedBeverage.getCondiments();
         assertEquals(expectedPrice, completedBeverage.getPrice(), 0);
-        assertEquals(1, addedCondiments.get("Sugar").getQuantity());
-        assertEquals(1, addedCondiments.get("Milk").getQuantity());
+        assertEquals(1, addedCondiments.get(CondimentType.SUGAR).getQuantity());
+        assertEquals(1, addedCondiments.get(CondimentType.MILK).getQuantity());
 
         //beverageMachine has been reset
         assertNull(beverageMachine.getCurrentBeverage());

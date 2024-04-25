@@ -9,6 +9,8 @@
 package edu.bu.met.cs665.beverages;
 
 import edu.bu.met.cs665.condiments.Condiment;
+import edu.bu.met.cs665.condiments.CondimentType;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,18 +23,20 @@ public abstract class Beverage {
 
   protected String name;
   private double price;
-  private final Map<String, Condiment> condiments;
+  private double waterQty;
+  private final Map<CondimentType, Condiment> condiments = new HashMap<>();;
 
   /**
    * Create a Beverage object and initialize with the given name and price values.
    *
    * @param name the name/type of the beverage
    * @param price the price of the beverage
+   * @param waterQty the amount of water in the beverage
    */
-  public Beverage(String name, double price) {
+  public Beverage(String name, double price, double waterQty) {
     this.name = name;
     this.price = price;
-    this.condiments = new HashMap<>();
+    this.waterQty = waterQty;
   }
 
   /**
@@ -60,7 +64,7 @@ public abstract class Beverage {
    * addToBeverage function) is done in the BeverageMachine class.
    */
   public void condimentAdded(Condiment condiment) {
-    this.condiments.put(condiment.getName(), condiment);
+    this.condiments.put(condiment.getType(), condiment);
     price += condiment.getPrice() * condiment.getQuantity();
   }
 
@@ -69,7 +73,7 @@ public abstract class Beverage {
    *
    * @return the Map of added condiments
    */
-  public Map<String, Condiment> getCondiments() {
+  public Map<CondimentType, Condiment> getCondiments() {
     return this.condiments;
   }
 
